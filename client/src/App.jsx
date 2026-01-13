@@ -27,6 +27,23 @@ function toTitleCase(s) {
   return String(s || "").trim() || "ABA Lesson Plan";
 }
 
+function getInitialTheme() {
+  try {
+    const saved = localStorage.getItem("lessonlab_theme_v1");
+    if (saved === "light" || saved === "dark") return saved;
+  } catch {}
+  // Default to system preference if no saved theme
+  try {
+    if (
+      window.matchMedia &&
+      window.matchMedia("(prefers-color-scheme: light)").matches
+    ) {
+      return "light";
+    }
+  } catch {}
+  return "dark";
+}
+
 export default function App() {
   const [form, setForm] = useState(emptyForm);
   const [loading, setLoading] = useState(false);
@@ -35,6 +52,8 @@ export default function App() {
   const [saved, setSaved] = useState([]);
   const [activeTab, setActiveTab] = useState("generator"); // generator | library
   const [health, setHealth] = useState(null);
+
+  const [theme, setTheme] = useState(getInitialTheme);
 
   useEffect(() => {
     setSaved(loadPlans());
@@ -47,10 +66,21 @@ export default function App() {
       .catch(() => setHealth(null));
   }, []);
 
+  useEffect(() => {
+    document.documentElement.setAttribute("data-theme", theme);
+    try {
+      localStorage.setItem("lessonlab_theme_v1", theme);
+    } catch {}
+  }, [theme]);
+
   const headerModel = useMemo(() => {
     if (!health?.ok) return "offline";
     return `${health.model}`;
   }, [health]);
+
+  function toggleTheme() {
+    setTheme((t) => (t === "dark" ? "light" : "dark"));
+  }
 
   function update(k, v) {
     setForm((prev) => ({ ...prev, [k]: v }));
@@ -144,6 +174,16 @@ export default function App() {
         </div>
 
         <div className="status">
+          <button
+            type="button"
+            className="pill pillBtn"
+            onClick={toggleTheme}
+            aria-label={`Switch to ${theme === "dark" ? "light" : "dark"} mode`}
+            title={`Switch to ${theme === "dark" ? "light" : "dark"} mode`}
+          >
+            {theme === "dark" ? "🌙 Dark" : "☀️ Light"}
+          </button>
+
           <div className={"pill " + (health?.ok ? "ok" : "bad")}>
             {health?.ok ? "Connected" : "Server offline"}
           </div>
