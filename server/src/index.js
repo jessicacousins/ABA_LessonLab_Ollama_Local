@@ -7,7 +7,7 @@ dotenv.config();
 const app = express();
 app.use(cors());
 app.use(express.json({ limit: "2mb" }));
-const PORT = process.env.PORT || 5055;
+const PORT = process.env.PORT || 3005;
 const OLLAMA_URL = process.env.OLLAMA_URL || "http://127.0.0.1:11434";
 const OLLAMA_MODEL = process.env.OLLAMA_MODEL || "qwen2.5:14b";
 const ASSISTANT_NAME = process.env.ASSISTANT_NAME || "LessonLab";
