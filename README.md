@@ -1,4 +1,4 @@
-# ABA LessonLab (Local Ollama) — Windows 11
+# ABA LessonLab (Local Ollama)
 
 A local-only lesson plan generator for ABA-based adult curriculum work.
 
