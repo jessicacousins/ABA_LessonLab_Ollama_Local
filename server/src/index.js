@@ -46,13 +46,18 @@
 //   console.log(`[LessonLab] Using Ollama at ${OLLAMA_URL} with model
 // ${OLLAMA_MODEL}`);
 // });
+
 import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
+import path from "path";
+import { fileURLToPath } from "url";
 import { buildLessonPrompt } from "./prompt.js";
 import { ollamaGenerate } from "./ollama.js";
 
-dotenv.config();
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+dotenv.config({ path: path.join(__dirname, ".env") });
 
 const app = express();
 app.disable("x-powered-by");
@@ -60,16 +65,26 @@ app.disable("x-powered-by");
 app.use(cors());
 app.use(express.json({ limit: "2mb" }));
 
-const PORT = process.env.PORT || 3005;
+const PORT = Number(process.env.PORT || 3005);
 const OLLAMA_URL = process.env.OLLAMA_URL || "http://127.0.0.1:11434";
-const OLLAMA_MODEL = process.env.OLLAMA_MODEL || "qwen2.5:14b";
+const OLLAMA_MODEL = process.env.OLLAMA_MODEL || "qwen2.5:7b";
 const ASSISTANT_NAME = process.env.ASSISTANT_NAME || "LessonLab";
 
-app.get("/api/health", (req, res) => {
+app.get("/api/health", async (req, res) => {
+  let ollamaOk = false;
+  try {
+    const r = await fetch(new URL("/api/tags", OLLAMA_URL).toString(), {
+      method: "GET",
+    });
+    ollamaOk = r.ok;
+  } catch {}
+
   res.json({
     ok: true,
     serverTime: new Date().toISOString(),
+    port: PORT,
     ollamaUrl: OLLAMA_URL,
+    ollamaOk,
     model: OLLAMA_MODEL,
     assistantName: ASSISTANT_NAME,
   });
@@ -86,6 +101,7 @@ function missingRequiredFields(input) {
 app.post("/api/generate", async (req, res) => {
   try {
     const input = req.body || {};
+
     const missing = missingRequiredFields(input);
     if (missing.length) {
       return res.status(400).json({
@@ -98,7 +114,7 @@ app.post("/api/generate", async (req, res) => {
 
     const text = await ollamaGenerate({
       ollamaUrl: OLLAMA_URL,
-      model: process.env.OLLAMA_MODEL || OLLAMA_MODEL,
+      model: OLLAMA_MODEL,
       prompt,
     });
 
@@ -109,7 +125,10 @@ app.post("/api/generate", async (req, res) => {
 
     res.json({ ok: true, text: cleaned });
   } catch (err) {
-    res.status(500).json({ ok: false, error: err?.message || String(err) });
+    res.status(500).json({
+      ok: false,
+      error: err?.message || String(err),
+    });
   }
 });
 
