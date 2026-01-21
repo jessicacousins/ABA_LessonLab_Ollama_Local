@@ -1598,12 +1598,12 @@ body {
   background:
     radial-gradient(
       circle at 30% 30%,
-      rgba(69, 255, 210, 0.9),
+      rgba(3, 245, 76, 0.9),
       transparent 60%
     ),
     radial-gradient(
       circle at 70% 70%,
-      rgba(76, 178, 255, 0.85),
+      rgba(238, 6, 219, 0.85),
       transparent 60%
     );
   filter: blur(0.2px);
