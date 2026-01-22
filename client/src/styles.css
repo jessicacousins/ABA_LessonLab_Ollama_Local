@@ -1449,7 +1449,7 @@ html[data-theme="light"] .bullets {
 
 :root {
   --bg: #070a12;
-  --text: #eaf0ff;
+  --text: #f3e5dd;
   --muted: rgba(234, 240, 255, 0.72);
   --muted2: rgba(234, 240, 255, 0.55);
 
@@ -1522,7 +1522,7 @@ body {
     Arial,
     "Apple Color Emoji",
     "Segoe UI Emoji";
-  letter-spacing: 0.15px;
+  letter-spacing: 0.55px;
 }
 
 .app {
@@ -1596,16 +1596,8 @@ body {
   height: 70%;
   border-radius: 999px;
   background:
-    radial-gradient(
-      circle at 30% 30%,
-      rgba(3, 245, 76, 0.9),
-      transparent 60%
-    ),
-    radial-gradient(
-      circle at 70% 70%,
-      rgba(238, 6, 219, 0.85),
-      transparent 60%
-    );
+    radial-gradient(circle at 30% 30%, rgba(3, 245, 76, 0.9), transparent 60%),
+    radial-gradient(circle at 70% 70%, rgba(238, 6, 219, 0.85), transparent 70%);
   filter: blur(0.2px);
   animation: spin 6s linear infinite;
 }
