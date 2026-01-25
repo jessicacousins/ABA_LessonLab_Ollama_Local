@@ -6,106 +6,12 @@ A local-only lesson plan generator for ABA-based adult curriculum work.
 - **Backend:** Node + Express
 - **LLM:** Ollama running on your PC (localhost)
 
-## Folder layout
-
-- `server/` — Express API that calls Ollama
-- `client/` — Vite/React UI
-
-## What this app does
+## Description
 
 1. You enter lesson plan inputs (target skill, mastery criteria, data collection, supports, etc.)
 2. The server calls your local Ollama model
 3. The UI shows a full structured lesson plan
 4. You can **save** plans locally and **export to PDF** (jsPDF)
-
-## Quick start (after installing Ollama)
-
-### 1) Ensure Ollama is running (Windows)
-
-Most Windows installs run Ollama automatically in the background.
-
-Quick check:
-
-- `ollama --version`
-- `ollama list`
-
-If Ollama is NOT running, start it:
-
-- `ollama serve`
-  (Leave that terminal open.)
-
-### 2) Pull a model (one-time per model)
-
-You only need to pull a model once:
-
-- `ollama pull qwen2.5:14b`
-
-After it finishes downloading, you do NOT need to pull it again unless you delete models or choose a new model.
-
-### 3) Start the server
-
-```bash
-cd server
-copy .env.example .env
-npm install
-npm run dev
-```
-
-### 4) Start the client
-
-```bash
-cd client
-npm install
-npm run dev
-```
-
-Open: http://127.0.0.1:5173
-
-## Running the app (after cloning)
-
-### Prereqs
-
-- Node.js (LTS)
-- Ollama installed
-
-### One-time setup
-
-1. Install dependencies:
-
-   - `npm --prefix server install`
-   - `npm --prefix client install`
-
-2. Create server env file:
-
-   - `cd server`
-   - `copy .env.example .env`
-   - (Optional) edit `.env` to change model name
-
-3. Download your model (one-time):
-   - `ollama pull qwen2.5:14b`
-
-### Run (each time you want to use it)
-
-1. Make sure Ollama is running:
-
-   - `ollama list`
-   - If not running: `ollama serve`
-
-2. Start backend:
-
-   - `cd server`
-   - `npm run dev`
-
-3. Start frontend (new terminal):
-   - `cd client`
-   - `npm run dev`
-
-Open: http://127.0.0.1:5173
-
-## Note:
-
-- If you change models, update `server/.env` (OLLAMA_MODEL=...)
-- Everything runs locally; no prompts or outputs are sent to a cloud service.
 
 # Legal Notice, Copyright & Attribution
 
