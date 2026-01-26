@@ -539,7 +539,7 @@ html[data-theme="light"] .btn.subtle {
 .error {
   border: 1px solid rgba(255, 76, 122, 0.25);
   background: rgba(255, 76, 122, 0.1);
-  color: rgba(255, 76, 122, 0.95);
+  color: rgba(236, 73, 114, 0.753);
   padding: 10px 12px;
   border-radius: 12px;
   margin-bottom: 10px;
@@ -565,8 +565,8 @@ html[data-theme="light"] .btn.subtle {
   border-radius: 999px;
   background: linear-gradient(
     90deg,
-    rgba(69, 255, 210, 0.7),
-    rgba(76, 178, 255, 0.7)
+    rgba(255, 14, 203, 0.932),
+    rgba(61, 241, 6, 0.918)
   );
   animation: shimmer 1.4s ease-in-out infinite;
 }
