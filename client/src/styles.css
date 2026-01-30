@@ -608,16 +608,23 @@ html[data-theme="dark"] .header:hover {
   width: 52px;
   height: 52px;
   border-radius: var(--radius-xl);
-  background: linear-gradient(
-    135deg,
-    var(--accent-primary),
-    var(--accent-secondary)
-  );
+  background:
+    conic-gradient(
+      from 210deg,
+      #d6fbe6,
+      #ffd8ee,
+      #c9f7df,
+      #ffcbe8,
+      #d6fbe6
+    );
+  background-size: 140% 140%;
   display: grid;
   place-items: center;
   position: relative;
   overflow: hidden;
-  box-shadow: var(--shadow-md);
+  box-shadow:
+    var(--shadow-md),
+    inset 0 0 12px rgba(255, 255, 255, 0.45);
   transition: all var(--duration-normal) var(--ease-spring);
   flex-shrink: 0;
 }
@@ -626,28 +633,44 @@ html[data-theme="dark"] .header:hover {
   content: "";
   position: absolute;
   inset: -3px;
-  background: linear-gradient(
-    45deg,
-    var(--accent-primary),
-    var(--accent-secondary),
-    var(--accent-tertiary),
-    var(--accent-primary)
-  );
-  background-size: 300% 300%;
-  animation: border-shimmer 4s ease infinite;
+  background:
+    conic-gradient(
+      from 30deg,
+      rgba(214, 251, 230, 0.92),
+      rgba(255, 216, 238, 0.92),
+      rgba(201, 247, 223, 0.92),
+      rgba(255, 203, 232, 0.92),
+      rgba(214, 251, 230, 0.92)
+    );
+  filter: blur(6px);
+  animation: spin-slow 6s linear infinite;
   z-index: -1;
   border-radius: inherit;
-  opacity: 0.8;
+  opacity: 0.85;
 }
 
 .logo:hover {
-  transform: scale(1.08) rotate(3deg);
-  box-shadow: var(--shadow-glow);
+  transform: scale(1.04);
+  box-shadow:
+    var(--shadow-glow),
+    0 0 18px rgba(182, 243, 210, 0.35);
 }
 
 html[data-theme="dark"] .logo {
-  box-shadow: var(--shadow-neon-green);
-  animation: pulse-neon 3s ease-in-out infinite;
+  background:
+    conic-gradient(
+      from 210deg,
+      #00ff66,
+      #ff2fd1,
+      #00f5ff,
+      #00ff8a,
+      #ff2fd1
+    );
+  background-size: 150% 150%;
+  box-shadow:
+    var(--shadow-neon-green),
+    0 0 26px rgba(255, 47, 209, 0.35);
+  animation: pulse-neon 3.5s ease-in-out infinite;
 }
 
 html[data-theme="dark"] .logo:hover {
@@ -659,10 +682,18 @@ html[data-theme="dark"] .logo:hover {
   width: 55%;
   height: 55%;
   border-radius: 50%;
-  background: var(--bg-elevated);
+  background:
+    radial-gradient(
+      circle at 35% 35%,
+      rgba(255, 255, 255, 0.95),
+      rgba(255, 255, 255, 0.65) 45%,
+      rgba(255, 255, 255, 0.2) 70%
+    );
   position: relative;
   overflow: hidden;
-  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+  box-shadow:
+    inset 0 2px 6px rgba(0, 0, 0, 0.1),
+    0 0 12px rgba(214, 251, 230, 0.35);
 }
 
 .logoInner::after {
@@ -676,6 +707,33 @@ html[data-theme="dark"] .logo:hover {
     transparent 65%
   );
   animation: shimmer 2.5s infinite;
+}
+
+html[data-theme="dark"] .logo::before {
+  background:
+    conic-gradient(
+      from 40deg,
+      rgba(0, 255, 102, 0.9),
+      rgba(255, 47, 209, 0.9),
+      rgba(0, 245, 255, 0.85),
+      rgba(0, 255, 138, 0.9),
+      rgba(255, 47, 209, 0.9)
+    );
+  filter: blur(8px);
+  animation: spin-slow 8s linear infinite;
+}
+
+html[data-theme="dark"] .logoInner {
+  background:
+    radial-gradient(
+      circle at 35% 35%,
+      rgba(255, 255, 255, 0.95),
+      rgba(8, 12, 14, 0.85) 55%,
+      rgba(0, 0, 0, 0.9) 75%
+    );
+  box-shadow:
+    inset 0 0 12px rgba(0, 255, 136, 0.25),
+    0 0 12px rgba(255, 47, 209, 0.25);
 }
 
 .brandText h1 {
