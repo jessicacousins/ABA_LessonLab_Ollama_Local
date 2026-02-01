@@ -1,4 +1,4 @@
-# ABA Lesson Lab (Local Ollama)
+# ABA Lesson Lab (Local Ollama Server)
 
 A local-only lesson plan generator for ABA-based adult curriculum work.
 
