@@ -8,7 +8,9 @@ A local-only lesson plan generator for ABA-based adult curriculum work.
 
 ## Description
 
-1. You enter lesson plan inputs (target skill, mastery criteria, data collection, supports, etc.)
+ABA Lesson Lab generates ABA lesson plans locally, using structured inputs that map to common documentation needs for Massachusetts Department of Developmental Services (DDS) and MassHealth. The form collects parameters such as target skill, mastery criteria, data collection method, prompts/supports, and generalization/maintenance so the resulting plan can align with required elements for clinical documentation and reimbursement.
+
+1. You enter lesson plan inputs (target skill, mastery criteria, data collection, supports, etc.), including DDS and MassHealth-aligned parameters
 2. The server calls your local Ollama model
 3. The UI shows a full structured lesson plan
 4. You can **save** plans locally and **export to PDF** (jsPDF)
