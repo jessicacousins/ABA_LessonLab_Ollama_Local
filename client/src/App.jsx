@@ -354,7 +354,7 @@ export default function App() {
                 <input
                   value={form.createdBy}
                   onChange={(e) => update("createdBy", e.target.value)}
-                  placeholder="e.g., J. Cousins, BCBA / Clinical Lead"
+                  placeholder="e.g., J. Doe, BCBA / Clinical Lead"
                 />
                 <div className="help">
                   This appears on the plan and helps teams track who generated
