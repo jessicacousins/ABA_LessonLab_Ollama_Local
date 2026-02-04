@@ -63,6 +63,8 @@ const emptyForm = {
   communicationMode: "",
   mobilityNeeds: "",
   sensoryProfile: "",
+  engagementInterests: "",
+  communityContext: "",
 
   // Scope
   skillArea: SKILL_AREAS[0],
@@ -251,6 +253,8 @@ export default function App() {
       `Model: ${health?.model || "unknown"}  |  Server: ${health?.ollamaUrl || "unknown"}`,
       `Setting: ${f.setting || "N/A"}  |  Session length: ${f.sessionLength || "N/A"}`,
       `Learner age: ${f.learnerAge || "N/A"}  |  Skill area: ${f.skillArea || "N/A"}`,
+      `Engagement interests: ${f.engagementInterests || "N/A"}`,
+      `Community context: ${f.communityContext || "N/A"}`,
       `Disciplines: ${(f.disciplines || []).join(", ") || "N/A"}`,
       `Secondary focus: ${(f.secondaryAreas || []).join(", ") || "N/A"}`,
       `Target skill: ${f.targetSkill || "N/A"}`,
@@ -464,6 +468,36 @@ export default function App() {
                   rows={2}
                   placeholder="Sensory triggers, supports, break needs, noise tolerance, preferred calming strategies."
                 />
+              </label>
+
+              <label className="field wide">
+                <span>Engagement interests / fun hooks</span>
+                <textarea
+                  value={form.engagementInterests}
+                  onChange={(e) =>
+                    update("engagementInterests", e.target.value)
+                  }
+                  rows={2}
+                  placeholder="Interests, favorite topics, music, hobbies, routines, or themes that will make learning fun."
+                />
+                <div className="help">
+                  Used to generate teacher scripts, interactive activities, and
+                  differentiated questions.
+                </div>
+              </label>
+
+              <label className="field wide">
+                <span>Community context / location focus</span>
+                <textarea
+                  value={form.communityContext}
+                  onChange={(e) => update("communityContext", e.target.value)}
+                  rows={2}
+                  placeholder="Neighborhoods, job sites, community goals, public transit, or locations to practice skills."
+                />
+                <div className="help">
+                  Helps the plan suggest community engagement ideas and when to
+                  use Google Maps for route/accessibility preview.
+                </div>
               </label>
 
               <label className="field">

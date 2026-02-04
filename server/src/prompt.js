@@ -15,6 +15,8 @@ export function buildLessonPrompt(input, assistantName = "LessonLab") {
     communicationMode,
     mobilityNeeds,
     sensoryProfile,
+    engagementInterests,
+    communityContext,
 
     // CURRICULUM SCOPE
     skillArea,
@@ -92,6 +94,12 @@ Include:
 - A short “Documentation Examples” section (sample service note lines and what to record).
 - A “Human Rights & Dignity Safeguards” section.
 - A “Safety & Risk Controls” section (specific to the input risks).
+- An “Engagement & Enrichment Playbook” that includes:
+  - ~10 teacher scripts (short, say-aloud lines) tailored to the target skill and learner.
+  - ~10 learner questions with an answer key, spanning varied cognitive levels (label each level).
+  - Interactive activity ideas (in-room, community, and digital options) that feel adult-appropriate.
+  - Resource scouting suggestions (search terms only; no URLs) for visuals, worksheets, videos, or local community resources.
+  - Community activity guidance: if relevant, suggest using Google Maps to preview routes/locations and plan accessibility.
 
 QUALITY BAR:
 Write like a senior clinician preparing a program that will survive audit/review:
@@ -121,6 +129,8 @@ Learner snapshot:
 - Communication mode / AAC: ${communicationMode || "N/A"}
 - Mobility / physical supports: ${mobilityNeeds || "N/A"}
 - Sensory profile / regulation needs: ${sensoryProfile || "N/A"}
+- Engagement interests / fun hooks: ${engagementInterests || "N/A"}
+- Community context / location focus: ${communityContext || "N/A"}
 
 Curriculum scope:
 - Primary skill area: ${skillArea || "N/A"}
