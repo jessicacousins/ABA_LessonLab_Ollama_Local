@@ -616,6 +616,23 @@ html[data-theme="dark"] ::selection {
     transform: translate3d(2px, -2px, 0);
   }
 }
+
+@property --logo-hue {
+  syntax: "<angle>";
+  inherits: true;
+  initial-value: 0deg;
+}
+
+@keyframes logo-hue {
+  0%,
+  100% {
+    --logo-hue: 0deg;
+  }
+  50% {
+    --logo-hue: 35deg;
+  }
+}
+
 @keyframes float {
   0%,
   100% {
@@ -754,37 +771,38 @@ html[data-theme="dark"] .header:hover {
 }
 
 .logo {
+  --logo-hue: 0deg;
   width: 52px;
   height: 52px;
   border-radius: 50%;
   clip-path: none;
   background:
     radial-gradient(
-      34px 34px at 20% 18%,
-      rgba(255, 168, 228, 0.9),
-      transparent 62%
+      42px 42px at 18% 22%,
+      rgba(255, 30, 200, 0.98),
+      transparent 64%
     ),
     radial-gradient(
-      32px 32px at 78% 24%,
-      rgba(170, 242, 220, 0.88),
-      transparent 62%
+      40px 40px at 80% 20%,
+      rgba(0, 240, 255, 0.95),
+      transparent 64%
     ),
     radial-gradient(
-      36px 36px at 28% 82%,
-      rgba(255, 198, 235, 0.8),
-      transparent 62%
+      46px 46px at 26% 82%,
+      rgba(70, 140, 255, 0.92),
+      transparent 67%
     ),
     radial-gradient(
-      34px 34px at 82% 78%,
-      rgba(182, 246, 226, 0.78),
-      transparent 62%
+      38px 38px at 82% 78%,
+      rgba(255, 200, 0, 0.92),
+      transparent 68%
     ),
     linear-gradient(
       155deg,
-      rgba(253, 250, 253, 0.96),
-      rgba(234, 242, 246, 0.96)
+      rgba(255, 255, 255, 1),
+      rgba(244, 250, 255, 0.98)
     );
-  background-size: 240% 240%, 220% 220%, 240% 240%, 220% 220%, 100% 100%;
+  background-size: 270% 270%, 250% 250%, 270% 270%, 250% 250%, 100% 100%;
   background-blend-mode: screen;
   display: grid;
   place-items: center;
@@ -792,42 +810,48 @@ html[data-theme="dark"] .header:hover {
   overflow: hidden;
   box-shadow:
     var(--shadow-md),
-    inset 0 0 18px rgba(255, 190, 232, 0.45),
-    0 0 16px rgba(170, 240, 210, 0.4);
-  filter: saturate(1.05);
+    inset 0 0 30px rgba(255, 90, 220, 0.7),
+    0 0 22px rgba(0, 230, 255, 0.65);
+  filter: saturate(1.45) hue-rotate(var(--logo-hue)) brightness(1.08);
   transition: all var(--duration-normal) var(--ease-spring);
   flex-shrink: 0;
   animation:
-    logo-mist 8.5s ease-in-out infinite,
-    logo-drift 5.5s ease-in-out infinite,
-    logo-bloom 7.2s ease-in-out infinite;
+    logo-mist 9s ease-in-out infinite,
+    logo-drift 6s ease-in-out infinite,
+    logo-bloom 7.6s ease-in-out infinite,
+    logo-hue 12s ease-in-out infinite;
 }
 
 .logo::before {
   content: "";
   position: absolute;
-  inset: 2px;
+  inset: -7px;
   background:
-    linear-gradient(
-      110deg,
-      rgba(255, 185, 232, 0.6),
-      rgba(175, 242, 220, 0.6),
-      rgba(255, 185, 232, 0.6)
+    radial-gradient(
+      54px 54px at 20% 60%,
+      rgba(255, 60, 215, 0.9),
+      transparent 70%
     ),
     radial-gradient(
-      30px 30px at 18% 68%,
-      rgba(255, 175, 232, 0.55),
-      transparent 68%
+      54px 54px at 78% 40%,
+      rgba(0, 245, 255, 0.88),
+      transparent 70%
+    ),
+    radial-gradient(
+      64px 64px at 50% 50%,
+      rgba(80, 160, 255, 0.82),
+      transparent 72%
     );
-  background-size: 200% 200%, 150% 150%;
-  filter: blur(6px);
+  background-size: 260% 260%, 260% 260%, 230% 230%;
+  filter: blur(12px) saturate(1.6) hue-rotate(var(--logo-hue)) brightness(1.08);
   animation:
-    logo-bloom 6.4s ease-in-out infinite,
-    logo-mist 10.5s ease-in-out infinite,
-    logo-drift 7s ease-in-out infinite;
+    logo-bloom 7s ease-in-out infinite,
+    logo-mist 11s ease-in-out infinite,
+    logo-drift 7.4s ease-in-out infinite,
+    logo-hue 14s ease-in-out infinite;
   z-index: 1;
   border-radius: 50%;
-  opacity: 0.8;
+  opacity: 1;
 }
 
 .logo::after {
@@ -838,102 +862,106 @@ html[data-theme="dark"] .header:hover {
   background:
     linear-gradient(
       70deg,
-      rgba(255, 214, 238, 0.65),
-      rgba(175, 242, 222, 0.55),
-      rgba(255, 214, 238, 0.65)
+      rgba(255, 120, 220, 0.88),
+      rgba(0, 245, 255, 0.8),
+      rgba(90, 170, 255, 0.78)
     );
-  background-size: 220% 220%;
+  background-size: 240% 240%;
   mix-blend-mode: screen;
+  filter: blur(10px) hue-rotate(var(--logo-hue)) brightness(1.08);
   animation:
-    logo-bloom 5.4s ease-in-out infinite,
-    logo-mist 9.2s ease-in-out infinite;
-  opacity: 0.75;
+    logo-bloom 5.8s ease-in-out infinite,
+    logo-mist 10s ease-in-out infinite,
+    logo-hue 12s ease-in-out infinite;
+  opacity: 0.98;
   pointer-events: none;
 }
 
 .logo:hover {
-  transform: scale(1.04);
+  transform: scale(1.05);
   box-shadow:
     var(--shadow-glow),
-    0 0 22px rgba(255, 47, 209, 0.45),
-    0 0 26px rgba(0, 255, 136, 0.45);
+    0 0 28px rgba(255, 60, 210, 0.7),
+    0 0 30px rgba(0, 235, 255, 0.7);
 }
 
 html[data-theme="dark"] .logo {
   background:
     radial-gradient(
-      34px 34px at 20% 18%,
-      rgba(255, 47, 209, 0.92),
-      transparent 62%
+      42px 42px at 18% 22%,
+      rgba(255, 30, 200, 0.98),
+      transparent 66%
     ),
     radial-gradient(
-      32px 32px at 78% 24%,
-      rgba(0, 255, 136, 0.88),
-      transparent 62%
+      40px 40px at 80% 20%,
+      rgba(0, 255, 220, 0.98),
+      transparent 66%
     ),
     radial-gradient(
-      36px 36px at 28% 82%,
-      rgba(255, 47, 209, 0.78),
-      transparent 62%
+      46px 46px at 26% 82%,
+      rgba(80, 155, 255, 0.96),
+      transparent 68%
     ),
     radial-gradient(
-      34px 34px at 82% 78%,
-      rgba(0, 255, 136, 0.72),
-      transparent 62%
+      38px 38px at 82% 78%,
+      rgba(255, 210, 0, 0.95),
+      transparent 70%
     ),
     linear-gradient(
-      135deg,
-      rgba(2, 2, 8, 0.96),
-      rgba(6, 0, 10, 0.98)
+      150deg,
+      rgba(6, 8, 18, 0.98),
+      rgba(12, 8, 20, 0.98)
     );
-  background-size: 240% 240%, 220% 220%, 240% 240%, 220% 220%, 100% 100%;
+  background-size: 270% 270%, 250% 250%, 270% 270%, 250% 250%, 100% 100%;
   background-blend-mode: screen;
   box-shadow:
     var(--shadow-neon-green),
-    0 0 26px rgba(255, 47, 209, 0.35);
-  filter: saturate(1.1);
+    0 0 34px rgba(255, 40, 215, 0.75);
+  filter: saturate(1.6) hue-rotate(var(--logo-hue)) brightness(1.12);
   animation:
-    logo-mist 7.4s ease-in-out infinite,
-    logo-drift 5s ease-in-out infinite,
-    logo-bloom 6.6s ease-in-out infinite,
-    pulse-neon 3.6s ease-in-out infinite;
+    logo-mist 8.2s ease-in-out infinite,
+    logo-drift 5.4s ease-in-out infinite,
+    logo-bloom 6.8s ease-in-out infinite,
+    logo-hue 10.8s ease-in-out infinite;
 }
 
 html[data-theme="dark"] .logo:hover {
-  box-shadow: var(--shadow-neon-green), var(--shadow-neon-pink);
+  box-shadow: var(--shadow-neon-green), 0 0 34px rgba(255, 40, 215, 0.8);
   animation: none;
 }
 
 .logoInner {
-  width: 55%;
-  height: 55%;
+  width: 56%;
+  height: 56%;
   border-radius: 50%;
   clip-path: none;
   background:
     radial-gradient(
-      26px 26px at 28% 32%,
-      rgba(255, 196, 236, 0.65),
+      24px 24px at 30% 30%,
+      rgba(255, 130, 225, 0.88),
       transparent 62%
     ),
     radial-gradient(
-      26px 26px at 72% 68%,
-      rgba(178, 244, 222, 0.6),
+      24px 24px at 70% 70%,
+      rgba(120, 245, 235, 0.86),
       transparent 62%
     ),
     linear-gradient(
       135deg,
-      rgba(248, 250, 252, 0.96),
-      rgba(232, 240, 246, 0.96)
+      rgba(255, 255, 255, 0.98),
+      rgba(240, 250, 255, 0.98)
     );
   position: relative;
   overflow: hidden;
   box-shadow:
-    inset 0 2px 6px rgba(0, 0, 0, 0.1),
-    0 0 12px rgba(255, 180, 230, 0.4);
+    inset 0 2px 8px rgba(0, 0, 0, 0.08),
+    0 0 14px rgba(255, 110, 225, 0.7);
+  filter: saturate(1.45) hue-rotate(var(--logo-hue)) brightness(1.08);
   animation:
-    logo-bloom 5.2s ease-in-out infinite,
-    logo-drift 6s ease-in-out infinite,
-    logo-mist 9.6s ease-in-out infinite;
+    logo-bloom 5.6s ease-in-out infinite,
+    logo-drift 6.4s ease-in-out infinite,
+    logo-mist 10s ease-in-out infinite,
+    logo-hue 12s ease-in-out infinite;
 }
 
 .logoInner::after {
@@ -942,65 +970,64 @@ html[data-theme="dark"] .logo:hover {
   inset: 0;
   background:
     radial-gradient(
-      24px 24px at 40% 60%,
-      rgba(255, 220, 240, 0.5),
+      26px 26px at 42% 58%,
+      rgba(255, 180, 245, 0.8),
       transparent 65%
     );
-  animation: logo-bloom 4.8s ease-in-out infinite;
+  filter: blur(6px);
+  animation: logo-bloom 5.2s ease-in-out infinite;
 }
 
 .logoInner::before {
   content: "";
   position: absolute;
-  inset: -8%;
+  inset: -10%;
   border-radius: 50%;
   background:
     radial-gradient(
       26px 26px at 30% 30%,
-      rgba(255, 200, 235, 0.35),
+      rgba(255, 140, 230, 0.7),
       transparent 60%
     ),
     radial-gradient(
       26px 26px at 70% 70%,
-      rgba(175, 240, 215, 0.3),
+      rgba(120, 255, 230, 0.68),
       transparent 60%
     );
-  filter: blur(8px);
+  filter: blur(9px) hue-rotate(var(--logo-hue)) brightness(1.08);
   animation:
-    logo-mist 10.5s ease-in-out infinite,
-    logo-drift 7.2s ease-in-out infinite;
-  opacity: 0.7;
+    logo-mist 11s ease-in-out infinite,
+    logo-drift 7.6s ease-in-out infinite,
+    logo-hue 12s ease-in-out infinite;
+  opacity: 0.95;
   pointer-events: none;
 }
 
 html[data-theme="dark"] .logoInner::before {
-  border-color: rgba(255, 47, 209, 0.85);
-  opacity: 0.95;
+  opacity: 1;
 }
 
 html[data-theme="dark"] .logoInner {
   background:
     radial-gradient(
       22px 22px at 25% 30%,
-      rgba(255, 47, 209, 0.7),
+      rgba(255, 90, 215, 0.9),
       transparent 60%
     ),
     radial-gradient(
       22px 22px at 75% 70%,
-      rgba(0, 255, 136, 0.65),
+      rgba(0, 255, 220, 0.9),
       transparent 60%
     ),
     linear-gradient(
       135deg,
-      rgba(2, 2, 8, 0.96),
-      rgba(6, 0, 10, 0.98)
+      rgba(6, 8, 18, 0.96),
+      rgba(14, 10, 20, 0.98)
     );
   box-shadow:
-    inset 0 0 12px rgba(0, 255, 102, 0.25),
-    0 0 16px rgba(255, 47, 209, 0.4);
-}
-
-.brandText h1 {
+    inset 0 0 16px rgba(0, 255, 220, 0.35),
+    0 0 20px rgba(255, 70, 220, 0.7);
+}.brandText h1 {
   font-size: 1.625rem;
   font-weight: 800;
   letter-spacing: -0.03em;
@@ -2536,3 +2563,7 @@ html[data-theme="dark"] .modal-content {
     border-width: 2px;
   }
 }
+
+
+
+
