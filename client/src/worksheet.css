@@ -1,0 +1,91 @@
+.worksheetPage {
+  width: min(92rem, calc(100% - var(--space-8)));
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: var(--space-6);
+  position: relative;
+  z-index: 2;
+}
+
+.worksheetCard {
+  grid-column: span 7;
+}
+
+.worksheetOutput {
+  grid-column: span 5;
+  min-height: 520px;
+}
+
+.worksheetLibrary {
+  grid-column: span 12;
+}
+
+.worksheetOptions {
+  margin-top: var(--space-6);
+}
+
+.worksheetToggles {
+  margin-top: var(--space-5);
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: var(--space-3);
+}
+
+.toggle {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border-subtle);
+  background: var(--bg-elevated);
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all var(--duration-fast) var(--ease-out-expo);
+}
+
+.toggle:hover {
+  border-color: var(--border-focus);
+  box-shadow: var(--shadow-sm);
+  transform: translateY(-2px);
+}
+
+.toggle input {
+  width: 18px;
+  height: 18px;
+  accent-color: var(--accent-primary);
+}
+
+.outputMeta {
+  display: flex;
+  gap: var(--space-2);
+  flex-wrap: wrap;
+  margin-bottom: var(--space-4);
+}
+
+html[data-theme="dark"] .toggle {
+  background: rgba(10, 10, 15, 0.6);
+  border-color: rgba(0, 255, 136, 0.15);
+}
+
+html[data-theme="dark"] .toggle:hover {
+  border-color: rgba(0, 255, 136, 0.3);
+  box-shadow: 0 0 12px -3px rgba(0, 255, 136, 0.2);
+}
+
+@media (max-width: 1200px) {
+  .worksheetCard {
+    grid-column: span 12;
+  }
+
+  .worksheetOutput {
+    grid-column: span 12;
+  }
+}
+
+@media (max-width: 768px) {
+  .worksheetPage {
+    grid-template-columns: 1fr;
+  }
+}
