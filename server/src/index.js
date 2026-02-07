@@ -4,6 +4,7 @@ import dotenv from "dotenv";
 import path from "path";
 import { fileURLToPath } from "url";
 import { buildLessonPrompt } from "./prompt.js";
+import { buildWorksheetPrompt } from "./worksheetPrompt.js";
 import { ollamaGenerate } from "./ollama.js";
 
 const __filename = fileURLToPath(import.meta.url);
@@ -49,6 +50,15 @@ function missingRequiredFields(input) {
   return missing;
 }
 
+function missingWorksheetFields(input) {
+  const missing = [];
+  if (!String(input?.createdBy || "").trim()) missing.push("createdBy");
+  if (!String(input?.staffingRatio || "").trim()) missing.push("staffingRatio");
+  if (!String(input?.lessonFocus || "").trim()) missing.push("lessonFocus");
+  if (!String(input?.topicCategory || "").trim()) missing.push("topicCategory");
+  return missing;
+}
+
 app.post("/api/generate", async (req, res) => {
   try {
     const input = req.body || {};
@@ -62,6 +72,40 @@ app.post("/api/generate", async (req, res) => {
     }
 
     const prompt = buildLessonPrompt(input, ASSISTANT_NAME);
+
+    const text = await ollamaGenerate({
+      ollamaUrl: OLLAMA_URL,
+      model: OLLAMA_MODEL,
+      prompt,
+    });
+
+    const cleaned = String(text || "")
+      .replace(/^\s*```(markdown)?/i, "")
+      .replace(/```\s*$/i, "")
+      .trim();
+
+    res.json({ ok: true, text: cleaned });
+  } catch (err) {
+    res.status(500).json({
+      ok: false,
+      error: err?.message || String(err),
+    });
+  }
+});
+
+app.post("/api/worksheet", async (req, res) => {
+  try {
+    const input = req.body || {};
+
+    const missing = missingWorksheetFields(input);
+    if (missing.length) {
+      return res.status(400).json({
+        ok: false,
+        error: `Missing required field(s): ${missing.join(", ")}`,
+      });
+    }
+
+    const prompt = buildWorksheetPrompt(input, ASSISTANT_NAME);
 
     const text = await ollamaGenerate({
       ollamaUrl: OLLAMA_URL,

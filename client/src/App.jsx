@@ -283,7 +283,7 @@ export default function App() {
 
       <header className="header">
         <div className="brand">
-          <div className="logo" aria-hidden="true">
+          <div className="/apclasswin" aria-hidden="true">
             <div className="logoInner" />
           </div>
           <div className="brandText">
