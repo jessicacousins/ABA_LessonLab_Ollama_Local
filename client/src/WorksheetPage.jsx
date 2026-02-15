@@ -1,6 +1,9 @@
 import React, { useEffect, useMemo, useState } from "react";
-import { addWorksheet, loadWorksheets, removeWorksheet } from "./utils/worksheetStorage.js";
-import { downloadLessonPDF } from "./utils/pdf.js";
+import {
+  addWorksheet,
+  loadWorksheets,
+  removeWorksheet,
+} from "./utils/worksheetStorage.js";
 
 const TOPIC_CATEGORIES = [
   "Math & Money Skills",
@@ -74,15 +77,74 @@ function toTitleCase(s) {
   return String(s || "").trim() || "Worksheet Pack";
 }
 
+function buildWorksheetItems(form) {
+  const topic =
+    form.topicCategory === "Custom (write below)"
+      ? String(form.customTopic || "").trim()
+      : form.topicCategory;
+
+  const focus = String(form.lessonFocus || "").trim();
+  const context = String(form.communityContext || "").trim();
+  const goals = String(form.goals || "").trim();
+  const materials = String(form.materials || "").trim();
+
+  const base = focus || topic || "the target skill";
+
+  const items = [
+    `Define ${base} in your own words.`,
+    `List 3 steps to complete ${base}.`,
+    `Identify one safety risk related to ${base} and how to reduce it.`,
+    `Scenario: ${context || "You are in the community"} — what is the best next step?`,
+    `Write a short script for how you would communicate ${base} to a staff member.`,
+    `Circle or mark: Which option shows healthy boundaries for ${base}? Explain.`,
+    `Match: Pair each situation with the safest response.`,
+    `Fill in the blank: When I need help with ${base}, I will _______________.`,
+    `Checklist: What tools or supports make ${base} easier?`,
+    `Reflection: How does ${base} help you at work or in the community?`,
+  ];
+
+  const answerKey = [
+    `Definition should reference the core skill: ${base}.`,
+    `Steps should be observable and in order (3+ steps).`,
+    `Safety response should be specific and preventative.`,
+    `Scenario response should show safe, adult-appropriate judgment.`,
+    `Communication script uses clear, respectful language.`,
+    `Boundary response respects consent, privacy, and dignity.`,
+    `Matching pairs should show safe and effective responses.`,
+    `Help-seeking statement should be direct and appropriate.`,
+    `Checklist should reference supports/AAC/visuals or materials.`,
+    `Reflection ties to real-life use (work/community/independence).`,
+  ];
+
+  return {
+    topic,
+    focus,
+    goals,
+    materials,
+    items,
+    answerKey,
+  };
+}
+
+const DRAFT_KEY = "lessonlab_worksheet_draft_v1";
+
 export default function WorksheetPage({ health }) {
   const [form, setForm] = useState(emptyWorksheet);
-  const [loading, setLoading] = useState(false);
-  const [output, setOutput] = useState("");
-  const [error, setError] = useState("");
+  const [answers, setAnswers] = useState(Array(10).fill(""));
   const [saved, setSaved] = useState([]);
 
   useEffect(() => {
     setSaved(loadWorksheets());
+  }, []);
+
+  useEffect(() => {
+    try {
+      const raw = localStorage.getItem(DRAFT_KEY);
+      if (!raw) return;
+      const parsed = JSON.parse(raw);
+      if (parsed?.form) setForm((prev) => ({ ...prev, ...parsed.form }));
+      if (Array.isArray(parsed?.answers)) setAnswers(parsed.answers);
+    } catch {}
   }, []);
 
   const headerModel = useMemo(() => {
@@ -103,99 +165,46 @@ export default function WorksheetPage({ health }) {
     });
   }
 
-  async function generateWorksheet() {
-    setError("");
-    setOutput("");
-    setLoading(true);
-    try {
-      if (!String(form.createdBy || "").trim()) {
-        throw new Error("Created By is required.");
-      }
-      if (!String(form.staffingRatio || "").trim()) {
-        throw new Error("Staffing Ratio is required.");
-      }
-      if (!String(form.lessonFocus || "").trim()) {
-        throw new Error("Lesson Focus is required.");
-      }
-      const topicCategory =
-        form.topicCategory === "Custom (write below)"
-          ? String(form.customTopic || "").trim()
-          : form.topicCategory;
-      if (!String(topicCategory || "").trim()) {
-        throw new Error("Topic Category is required.");
-      }
-
-      const payload = {
-        ...form,
-        topicCategory,
-      };
-
-      const res = await fetch("/api/worksheet", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
-      });
-
-      const data = await res.json().catch(() => null);
-      if (!res.ok || !data?.ok) {
-        throw new Error(data?.error || "Worksheet generation failed.");
-      }
-
-      setOutput(String(data.text || "").trim());
-    } catch (e) {
-      setError(e?.message || String(e));
-    } finally {
-      setLoading(false);
-    }
-  }
-
   function saveCurrent() {
-    if (!output) return;
-    const title = toTitleCase(form.lessonFocus);
+    const title = toTitleCase(form.lessonFocus || form.topicCategory);
     const item = {
       id: uid(),
       title,
       createdAt: new Date().toISOString(),
       formSnapshot: form,
-      text: output,
+      answers,
     };
     const items = addWorksheet(item);
     setSaved(items);
   }
 
-  function exportPDF(item) {
-    const f = item?.formSnapshot || form;
-    const topicCategory =
-      f.topicCategory === "Custom (write below)"
-        ? f.customTopic || "Custom topic"
-        : f.topicCategory;
-
-    const metaLines = [
-      `Created: ${new Date(item?.createdAt || Date.now()).toLocaleString()}`,
-      `Created by: ${f.createdBy || "N/A"}  |  Staffing ratio (staff:clients): ${
-        f.staffingRatio || "N/A"
-      }`,
-      `Service: ${f.serviceType || "N/A"}  |  Delivery: ${f.serviceDelivery || "N/A"}`,
-      `Model: ${health?.model || "unknown"}  |  Server: ${health?.ollamaUrl || "unknown"}`,
-      `Setting: ${f.setting || "N/A"}  |  Session length: ${f.sessionLength || "N/A"}`,
-      `Learner age: ${f.learnerAge || "N/A"}  |  Topic: ${topicCategory || "N/A"}`,
-      `Lesson focus: ${f.lessonFocus || "N/A"}`,
-      `Goals: ${f.goals || "N/A"}`,
-      `Accommodations: ${f.accommodations || "N/A"}`,
-    ];
-
-    downloadLessonPDF({
-      title: item?.title || toTitleCase(f.lessonFocus),
-      metaLines,
-      bodyText: item?.text || output,
-    });
-  }
-
   function reset() {
     setForm(emptyWorksheet);
-    setOutput("");
-    setError("");
+    setAnswers(Array(10).fill(""));
   }
+
+  const preview = useMemo(() => buildWorksheetItems(form), [form]);
+
+  useEffect(() => {
+    if (!Array.isArray(preview.items)) return;
+    if (answers.length === preview.items.length) return;
+    setAnswers((prev) => {
+      const next = Array(preview.items.length).fill("");
+      for (let i = 0; i < Math.min(prev.length, next.length); i += 1) {
+        next[i] = prev[i];
+      }
+      return next;
+    });
+  }, [preview.items, answers.length]);
+
+  useEffect(() => {
+    try {
+      localStorage.setItem(
+        DRAFT_KEY,
+        JSON.stringify({ form, answers }),
+      );
+    } catch {}
+  }, [form, answers]);
 
   return (
     <main className="worksheetPage">
@@ -484,10 +493,10 @@ export default function WorksheetPage({ health }) {
         </div>
 
         <div className="actions">
-          <button className="btn" disabled={loading} onClick={generateWorksheet}>
-            {loading ? "Generatingâ€¦" : "Generate worksheets"}
+          <button className="btn" onClick={saveCurrent}>
+            Save progress
           </button>
-          <button className="btn ghost" disabled={loading} onClick={reset}>
+          <button className="btn ghost" onClick={reset}>
             Reset
           </button>
         </div>
@@ -498,45 +507,78 @@ export default function WorksheetPage({ health }) {
         </p>
       </section>
 
-      <section className="card outputCard worksheetOutput">
+      <section className="card worksheetOutput">
         <div className="outputHeader">
-          <h2>Worksheet output</h2>
-          <div className="outputActions">
-            <button className="btn subtle" disabled={!output} onClick={saveCurrent}>
-              Save
-            </button>
-            <button
-              className="btn subtle"
-              disabled={!output}
-              onClick={() => exportPDF(null)}
-            >
-              Download PDF
-            </button>
+          <h2>Projector worksheet</h2>
+          <div className="outputMeta">
+            <span className="pill subtle">Model: {headerModel}</span>
+            <span className="pill subtle">Saved: {saved.length}</span>
           </div>
         </div>
 
-        <div className="outputMeta">
-          <span className="pill subtle">Model: {headerModel}</span>
-          <span className="pill subtle">
-            Saved: {saved.length}
-          </span>
-        </div>
+        <div className="worksheetDeck">
+          <div className="worksheetSlide">
+            <div className="worksheetTitle">
+              {preview.topic || "Worksheet Topic"} — {preview.focus || "Lesson focus"}
+            </div>
+            <div className="worksheetMeta">
+              <span>Goals: {preview.goals || "Define measurable outcomes."}</span>
+              <span>Materials: {preview.materials || "List required supports."}</span>
+            </div>
 
-        {error ? <div className="error">{error}</div> : null}
-
-        {!output ? (
-          <div className="empty">
-            <div className="emptyInner">
-              <div className="spark" aria-hidden="true" />
-              <p>Fill required fields and click â€œGenerate worksheetsâ€.</p>
-              <p className="small">
-                The worksheet pack is designed for adult day programs in MA.
-              </p>
+            <div className="worksheetItems">
+              {preview.items.map((item, idx) => (
+                <div key={item} className="worksheetItem">
+                  <div className="worksheetPrompt">
+                    {idx + 1}. {item}
+                  </div>
+                  <textarea
+                    className="worksheetAnswer"
+                    rows={2}
+                    value={answers[idx] || ""}
+                    onChange={(e) => {
+                      const value = e.target.value;
+                      setAnswers((prev) => {
+                        const next = [...prev];
+                        next[idx] = value;
+                        return next;
+                      });
+                    }}
+                    placeholder="Type response here..."
+                  />
+                </div>
+              ))}
             </div>
           </div>
-        ) : (
-          <pre className="output">{output}</pre>
-        )}
+
+          {form.includeAnswerKey ? (
+            <aside className="worksheetNotes">
+              <h3>Answer key / facilitator notes</h3>
+              <ul className="worksheetNotesList">
+                {preview.answerKey.map((note, idx) => (
+                  <li key={note}>
+                    <strong>{idx + 1}.</strong> {note}
+                  </li>
+                ))}
+              </ul>
+
+              <div className="worksheetNotesMeta">
+                <div>
+                  <strong>Accommodations:</strong>{" "}
+                  {form.accommodations || "Add AAC, visuals, reduced writing, or breaks."}
+                </div>
+                <div>
+                  <strong>Safety focus:</strong>{" "}
+                  {form.healthSafetyRisks || "Review relevant safety risks."}
+                </div>
+                <div>
+                  <strong>Rights & consent:</strong>{" "}
+                  {form.rightsConsiderations || "Protect dignity and consent."}
+                </div>
+              </div>
+            </aside>
+          ) : null}
+        </div>
       </section>
 
       <section className="card worksheetLibrary">
@@ -558,14 +600,15 @@ export default function WorksheetPage({ health }) {
                     </div>
                   </div>
                   <div className="itemBtns">
-                    <button className="btn subtle" onClick={() => exportPDF(item)}>
-                      PDF
-                    </button>
                     <button
                       className="btn subtle"
                       onClick={() => {
                         setForm(item.formSnapshot || emptyWorksheet);
-                        setOutput(item.text || "");
+                        setAnswers(
+                          Array.isArray(item.answers)
+                            ? item.answers
+                            : Array(10).fill(""),
+                        );
                       }}
                     >
                       Open

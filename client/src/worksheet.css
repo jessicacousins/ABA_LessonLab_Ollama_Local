@@ -64,6 +64,113 @@
   margin-bottom: var(--space-4);
 }
 
+.worksheetDeck {
+  display: grid;
+  grid-template-columns: minmax(0, 2.2fr) minmax(0, 1fr);
+  gap: var(--space-5);
+  align-items: start;
+}
+
+.worksheetSlide {
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-xl);
+  padding: var(--space-5);
+  box-shadow: var(--shadow-sm);
+}
+
+.worksheetTitle {
+  font-size: 1.35rem;
+  font-weight: 700;
+  margin-bottom: var(--space-3);
+}
+
+.worksheetMeta {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  margin-bottom: var(--space-4);
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+}
+
+.worksheetItems {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.worksheetItem {
+  padding: var(--space-3);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border-subtle);
+  background: var(--bg);
+}
+
+.worksheetPrompt {
+  font-weight: 600;
+  margin-bottom: var(--space-2);
+}
+
+.worksheetAnswer {
+  width: 100%;
+  border-radius: var(--radius-md);
+  border: 1px dashed var(--border-default);
+  padding: var(--space-3);
+  font-family: var(--font-sans);
+  background: transparent;
+  color: var(--text-primary);
+  resize: vertical;
+  min-height: 70px;
+}
+
+.worksheetAnswer:focus {
+  outline: 2px solid var(--border-focus);
+  outline-offset: 2px;
+}
+
+.worksheetNotes {
+  position: sticky;
+  top: var(--space-6);
+  align-self: start;
+  padding: var(--space-4);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border-subtle);
+  background: linear-gradient(
+    135deg,
+    rgba(255, 47, 209, 0.08),
+    rgba(0, 217, 255, 0.04)
+  );
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+}
+
+.worksheetNotes h3 {
+  margin-bottom: var(--space-3);
+  font-size: 1rem;
+  color: var(--text-primary);
+}
+
+.worksheetNotesList {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  margin-bottom: var(--space-4);
+}
+
+.worksheetNotesList li {
+  line-height: 1.5;
+}
+
+.worksheetNotesMeta {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  font-size: 0.85rem;
+}
+
 html[data-theme="dark"] .toggle {
   background: rgba(10, 10, 15, 0.6);
   border-color: rgba(0, 255, 136, 0.15);
@@ -74,6 +181,42 @@ html[data-theme="dark"] .toggle:hover {
   box-shadow: 0 0 12px -3px rgba(0, 255, 136, 0.2);
 }
 
+html[data-theme="dark"] .worksheetSlide {
+  background: rgba(10, 10, 15, 0.6);
+  border-color: rgba(0, 255, 136, 0.12);
+}
+
+html[data-theme="dark"] .worksheetItem {
+  background: rgba(10, 10, 15, 0.35);
+  border-color: rgba(0, 255, 136, 0.1);
+}
+
+html[data-theme="dark"] .worksheetNotes {
+  background: linear-gradient(
+    135deg,
+    rgba(0, 255, 136, 0.08),
+    rgba(255, 0, 160, 0.04)
+  );
+  border-color: rgba(0, 255, 136, 0.15);
+}
+
+html[data-view="projector"] .worksheetTitle {
+  font-size: 1.6rem;
+}
+
+html[data-view="projector"] .worksheetPrompt {
+  font-size: 1.05rem;
+}
+
+html[data-view="projector"] .worksheetAnswer {
+  font-size: 1.05rem;
+  min-height: 90px;
+}
+
+html[data-view="projector"] .worksheetNotes {
+  font-size: 0.95rem;
+}
+
 @media (max-width: 1200px) {
   .worksheetCard {
     grid-column: span 12;
@@ -81,6 +224,10 @@ html[data-theme="dark"] .toggle:hover {
 
   .worksheetOutput {
     grid-column: span 12;
+  }
+
+  .worksheetDeck {
+    grid-template-columns: 1fr;
   }
 }
 
